@@ -1,10 +1,10 @@
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.constants import ParseMode
 from telegram.ext import ApplicationBuilder, ContextTypes, CallbackContext, CommandHandler, MessageHandler, CallbackQueryHandler, filters
-
+import os
 
 # token that we get from the BotFather
-TOKEN = "6368731600:AAERA8QTjoqzWLA4TZZza-dP6j8a0-uIn4s"
+TOKEN = os.environ["SURVEY_BOT_TOKEN"]
 
 class survay_bot:
     def __init__(self) -> None:
