@@ -11,7 +11,8 @@ This is a Telegram survey bot for collecting survey results.
 ```export SURVEY_BOT_TOKEN=<TOKEN>```
 
 ## Run bot
-```python survey_bot.py [qa.tsv]```
+```python survey_bot.py [path to question input file]```
+Survey results will be saved to local csv file.
 
 ## Try the bot on Telegram
 https://t.me/RelaExepAttaBot
