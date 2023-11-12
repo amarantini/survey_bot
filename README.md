@@ -11,4 +11,7 @@ This is a Telegram survey bot for collecting survey results.
 ```export SURVEY_BOT_TOKEN=<TOKEN>```
 
 ## Run bot
-```python survey_bot.py```
+```python survey_bot.py [qa.tsv]```
+
+## Try the bot on Telegram
+https://t.me/RelaExepAttaBot

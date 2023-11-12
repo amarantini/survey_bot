@@ -2,19 +2,27 @@ from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.constants import ParseMode
 from telegram.ext import ApplicationBuilder, ContextTypes, CallbackContext, CommandHandler, MessageHandler, CallbackQueryHandler, filters
 import os
+import argparse
+import pandas as pd
+import time
+
+parser = argparse.ArgumentParser()
+parser.add_argument('question_input', type=str,
+                    help='path to question input .csv file')
 
 # token that we get from the BotFather
 TOKEN = os.environ["SURVEY_BOT_TOKEN"]
 
 class survay_bot:
-    def __init__(self) -> None:
+    def __init__(self, texts, buttons, output_path="./outputs/") -> None:
+        self.output_path = output_path
+        if not os.path.exists(output_path):
+            os.mkdir(self.output_path) 
         self.IDX = 0
-        self.TEXT = ["Do you like cat?"]
-        self.BUTTONS = [["yes", "no"]]
+        self.TEXT = texts
+        self.BUTTONS = buttons
         self.START = "Start"
         self.result = []
-        # TODO: fetch survey questions
-        
 
     async def menu(self, update: Update, context: CallbackContext) -> None:
         """
@@ -61,11 +69,22 @@ class survay_bot:
                 text="Thank you for completing the survey!",
                 parse_mode=ParseMode.HTML
             )
-            # TODO: save survey result
+            # save survey result
+            df = pd.DataFrame(self.result, columns=["Answers"])
+            # saving the dataframe
+            df.to_csv(self.output_path + time.strftime("%Y%m%d-%H%M%S")+".csv", index=False)
 
 # Reading the respomnse from the user and responding to it accordingly
 def main() -> None:
-    bot = survay_bot()
+    args = parser.parse_args()
+
+    # load questions
+    questions = pd.read_csv(args.question_input,sep='\t')
+    texts = questions["Questions"].tolist()
+    buttons = questions["Buttons"].tolist()
+    buttons = [string.split(",") for string in buttons]
+
+    bot = survay_bot(texts, buttons)
     application = ApplicationBuilder().token(TOKEN).build()
     
     # Menu handler
